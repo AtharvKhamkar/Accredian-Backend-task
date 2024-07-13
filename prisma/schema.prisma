@@ -1,0 +1,65 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String       @id @default(uuid())
+  fullname      String
+  username      String
+  email         String       @unique
+  password      String
+  refreshToken  String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  enrollment    Enrollment[]
+  referralsFrom Referral[]   @relation("ReferrerRelation")
+  referralsTo   Referral[]   @relation("RefereeRelation")
+}
+
+model Course {
+  id          String         @id @default(uuid())
+  course_name String
+  price       Int?           @default(0)
+  duration    CourseDuration
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  enrollment  Enrollment[]
+}
+
+enum CourseDuration {
+  ONE_MONTH
+  THREE_MONTHS
+  SIX_MONTHS
+  TWELVE_MONTHS
+}
+
+model Enrollment {
+  id         String    @id @default(uuid())
+  student    User      @relation(fields: [student_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  student_id String
+  course     Course    @relation(fields: [course_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  course_id  String
+  startDate  DateTime  @default(now())
+  endDate    DateTime?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
+
+model Referral {
+  id          String @id @default(uuid())
+  referrer    User   @relation("ReferrerRelation", fields: [referrer_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  referrer_id String
+  referee     User   @relation("RefereeRelation", fields: [referee_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  referee_id  String
+}
