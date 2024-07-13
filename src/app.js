@@ -22,6 +22,13 @@ app.use(express.static("public"));
 
 app.use(cookieParser());
 
+//All Routes
+import courseRouter from "./routes/course.routes.js";
+import userRouter from "./routes/user.routes.js";
+
+app.use("/api/v1/user", userRouter)
+app.use("/api/v1/course",courseRouter)
+
 
 
 export default app;

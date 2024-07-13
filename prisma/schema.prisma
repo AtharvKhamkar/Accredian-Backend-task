@@ -23,18 +23,21 @@ model User {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
   enrollment    Enrollment[]
+  course        Course[]
   referralsFrom Referral[]   @relation("ReferrerRelation")
   referralsTo   Referral[]   @relation("RefereeRelation")
 }
 
 model Course {
-  id          String         @id @default(uuid())
-  course_name String
-  price       Int?           @default(0)
-  duration    CourseDuration
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
-  enrollment  Enrollment[]
+  id            String         @id @default(uuid())
+  course_name   String         @unique
+  instructor    User           @relation(fields: [instructor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  instructor_id String
+  price         Int?           @default(0)
+  duration      CourseDuration
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  enrollment    Enrollment[]
 }
 
 enum CourseDuration {
