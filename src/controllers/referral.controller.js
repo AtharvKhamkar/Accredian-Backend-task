@@ -14,7 +14,6 @@ const addReferral = asyncHandler(async (req, res) => {
     
     const user = req.user;
     const { referee_name, referee_email, referee_mobile_no, relation, course_name } = req.body;
-
     //check referrar have enrolled for course or not
     const isEnrolled = await prisma.enrollment.findFirst({
         where: {

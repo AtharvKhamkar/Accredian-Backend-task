@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const addCourse = asyncHandler(async (req, res) => {
     const user = req.user;
-    const { course_name, price, duration } = req.body;
+    const { course_name, price, duration,referrer_bonus,referee_bonus } = req.body;
 
     const checkTitle = await prisma.course.findUnique({
         where: {
@@ -30,7 +30,9 @@ const addCourse = asyncHandler(async (req, res) => {
             course_name,
             instructor_id:user.id,
             price:parseInt(price),
-            duration
+            duration,
+            referrer_bonus: parseInt(referrer_bonus),
+            referee_bonus:parseInt(referee_bonus)
         }
     })
 
@@ -44,4 +46,18 @@ const addCourse = asyncHandler(async (req, res) => {
     )
 })
 
-export { addCourse };
+const allCourses = asyncHandler(async (req, res) => {
+    const courses = await prisma.course.findMany({});
+
+    return res.status(200)
+        .json(
+            new ApiResponse(
+                200,
+                courses,
+                "All courses fetched"
+        )
+    )
+})
+
+export { addCourse, allCourses };
+

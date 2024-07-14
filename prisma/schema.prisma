@@ -34,6 +34,8 @@ model Course {
   instructor_id String
   price         Int?           @default(0)
   duration      CourseDuration
+  referrer_bonus Int           @default(0)
+  referee_bonus  Int           @default(0)
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   enrollment    Enrollment[]

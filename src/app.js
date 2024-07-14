@@ -1,8 +1,11 @@
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import morgan from "morgan";
 
 const app = express();
+
+app.use(morgan('dev'))
 
 app.use(cors({
     origin: process.env.CORS_ORIGIN,
@@ -25,8 +28,8 @@ app.use(cookieParser());
 //All Routes
 import courseRouter from "./routes/course.routes.js";
 import enrollmentRouter from "./routes/enrollment.routes.js";
-import userRouter from "./routes/user.routes.js";
 import referRouter from "./routes/referral.routes.js";
+import userRouter from "./routes/user.routes.js";
 
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/course", courseRouter)
